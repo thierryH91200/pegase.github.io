@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PegaseUIData — Verwalte deine Finanzen auf dem Mac</title>
+<meta name="description" content="PegaseUIData: kostenlose Open-Source-App für macOS, die deine Konten bündelt, deine Liquidität verfolgt und deine Ausgaben visualisiert. 100% lokale Daten.">
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#16233f; --navy-2:#1e3057; --gold:#c6a34e; --gold-soft:#e0c987;
+    --cream:#f5f1e6; --cream-2:#efe9d8;
+    --ink:#16233f; --muted:#5a6377; --line:#e4ddca;
+    --bg:#fbf9f2; --card:#ffffff; --shadow:0 18px 50px rgba(22,35,63,.12);
+    --radius:18px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#eef1f6; --muted:#a7b0c2; --line:#2a3a5c;
+      --bg:#0e1526; --card:#161f36; --cream:#131c31; --cream-2:#0f1729;
+      --shadow:0 18px 50px rgba(0,0,0,.5);
+    }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+       background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  h1,h2,h3{line-height:1.15;letter-spacing:-.02em;margin:0}
+
+  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
+    background:color-mix(in srgb,var(--bg) 82%,transparent);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:1.12rem}
+  .brand img{width:38px;height:38px;border-radius:10px}
+  .nav-links{display:flex;gap:28px;align-items:center;font-weight:500;font-size:.95rem}
+  .nav-links a{color:var(--muted)}
+  .nav-links a:hover{color:var(--ink)}
+  .lang{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;font-size:.82rem;font-weight:600}
+  .lang a{padding:6px 12px;color:var(--muted)}
+  .lang a.active{background:var(--navy);color:#fff}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-weight:600;border-radius:12px;
+    padding:12px 20px;transition:transform .15s ease, box-shadow .2s ease;cursor:pointer;border:0}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-primary{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;
+    box-shadow:0 10px 26px rgba(22,35,63,.28)}
+  .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-soft));color:#3a2e0e;
+    box-shadow:0 10px 26px rgba(198,163,78,.35)}
+  .btn-ghost{border:1px solid var(--line);color:var(--ink);background:transparent}
+  @media(max-width:720px){.nav-links{display:none}}
+
+  .hero{position:relative;padding:78px 0 40px;text-align:center;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;z-index:-1;
+    background:radial-gradient(60% 55% at 50% 0%,rgba(198,163,78,.16),transparent 70%);}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.8rem;font-weight:600;
+    letter-spacing:.04em;text-transform:uppercase;color:var(--gold);
+    background:color-mix(in srgb,var(--gold) 14%,transparent);
+    padding:7px 14px;border-radius:999px;margin-bottom:22px}
+  .hero h1{font-size:clamp(2.2rem,5.4vw,3.6rem);font-weight:800;max-width:16ch;margin:0 auto}
+  .hero p.lead{font-size:clamp(1.05rem,2.2vw,1.28rem);color:var(--muted);max-width:56ch;
+    margin:22px auto 0}
+  .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:34px}
+  .badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+  .badge{font-size:.82rem;font-weight:500;color:var(--muted);border:1px solid var(--line);
+    background:var(--card);padding:7px 13px;border-radius:999px}
+  .badge b{color:var(--ink)}
+
+  .shot{margin:52px auto 0;max-width:1000px;border-radius:var(--radius);overflow:hidden;
+    box-shadow:var(--shadow);border:1px solid var(--line)}
+  .shot img{width:100%;display:block}
+
+  section{padding:74px 0}
+  .sec-head{text-align:center;max-width:60ch;margin:0 auto 48px}
+  .sec-head h2{font-size:clamp(1.7rem,3.6vw,2.4rem);font-weight:800}
+  .sec-head p{color:var(--muted);margin-top:14px;font-size:1.06rem}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media(max-width:860px){.grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.grid{grid-template-columns:1fr}}
+  .feat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px;transition:transform .18s ease,box-shadow .2s ease}
+  .feat:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+  .feat .ic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;
+    background:color-mix(in srgb,var(--gold) 16%,transparent);font-size:1.35rem;margin-bottom:16px}
+  .feat h3{font-size:1.12rem;font-weight:700;margin-bottom:8px}
+  .feat p{color:var(--muted);font-size:.96rem;margin:0}
+
+  .gallery{background:var(--cream)}
+  .gal-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:10px}
+  @media(max-width:720px){.gal-grid{grid-template-columns:1fr}}
+  .gal{border-radius:14px;overflow:hidden;border:1px solid var(--line);background:var(--card);
+    box-shadow:0 8px 26px rgba(22,35,63,.08)}
+  .gal img{width:100%;display:block}
+  .gal .cap{padding:14px 18px;font-size:.92rem;color:var(--muted)}
+  .gal .cap b{color:var(--ink);font-weight:600}
+
+  .privacy{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;
+    border-radius:24px;padding:52px 40px;text-align:center;margin:0 auto;max-width:900px}
+  .privacy h2{color:#fff;font-size:1.9rem;font-weight:800}
+  .privacy p{color:#cdd6e8;max-width:52ch;margin:16px auto 0}
+  .privacy .row{display:flex;gap:36px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+  .privacy .row div b{display:block;font-size:1.7rem;color:var(--gold-soft)}
+  .privacy .row div span{color:#aab6cf;font-size:.9rem}
+
+  details{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:4px 22px;margin-bottom:12px}
+  details[open]{box-shadow:var(--shadow)}
+  summary{cursor:pointer;font-weight:600;padding:16px 0;list-style:none;display:flex;
+    justify-content:space-between;align-items:center;gap:16px}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";color:var(--gold);font-size:1.4rem;font-weight:400;transition:transform .2s}
+  details[open] summary::after{transform:rotate(45deg)}
+  details p{color:var(--muted);margin:0 0 18px;font-size:.97rem}
+
+  .download{text-align:center}
+  .download .card{background:var(--card);border:1px solid var(--line);border-radius:24px;
+    padding:56px 32px;max-width:760px;margin:0 auto;box-shadow:var(--shadow)}
+  .download img{width:74px;height:74px;border-radius:18px;margin-bottom:20px}
+
+  footer{border-top:1px solid var(--line);padding:40px 0;color:var(--muted);font-size:.9rem}
+  .foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px;align-items:center}
+  .foot a{color:var(--muted)}.foot a:hover{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top"><img src="assets/logo.png" alt="Pegasus-Logo"> PegaseUIData</a>
+    <nav class="nav-links">
+      <a href="#features">Funktionen</a>
+      <a href="#captures">Screenshots</a>
+      <a href="#faq">FAQ</a>
+      <span class="lang"><a href="index.html">FR</a><a href="en.html">EN</a><a href="es.html">ES</a><a href="it.html">IT</a><a class="active" href="de.html">DE</a></span>
+      <a class="btn btn-gold" href="#download">Herunterladen</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow">✦ macOS-App · Kostenlos &amp; Open Source</span>
+      <h1>Deine Finanzen, übersichtlich auf deinem Mac</h1>
+      <p class="lead">PegaseUIData bündelt deine Konten, verfolgt deine Liquidität und verwandelt
+        deine Transaktionen in verständliche Diagramme. Einfach, schnell und 100% lokal.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#download">⬇ Für macOS herunterladen</a>
+        <a class="btn btn-ghost" href="#features">Funktionen entdecken</a>
+      </div>
+      <div class="badges">
+        <span class="badge">🍎 macOS <b>14+</b></span>
+        <span class="badge">🔒 <b>Lokale</b> Daten</span>
+        <span class="badge">💶 <b>Kostenlos</b></span>
+        <span class="badge">📄 <b>MIT</b>-Lizenz</span>
+        <span class="badge">🌍 <b>5 Sprachen</b></span>
+      </div>
+      <div class="shot">
+        <img src="assets/de/Capture1.png" alt="PegaseUIData-Oberfläche: Transaktionsliste und Bearbeitungsbereich">
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Alles, um dein Geld zu steuern</h2>
+        <p>Eine native SwiftUI-App, die aufs Wesentliche zielt – ohne Abstriche bei der Übersicht.</p>
+      </div>
+      <div class="grid">
+        <div class="feat"><div class="ic">🏦</div><h3>Mehrere Konten</h3>
+          <p>Verwalte so viele Konten wie nötig – Giro, Sparkonto, geschäftlich – gebündelt in einer aufgeräumten Seitenleiste.</p></div>
+        <div class="feat"><div class="ic">📋</div><h3>Geordnete Transaktionen</h3>
+          <p>Deine Buchungen nach Jahr und Monat sortiert, mit Unterbuchungen, Status (erledigt, geplant, gebunden) und Bearbeitung per Klick.</p></div>
+        <div class="feat"><div class="ic">📈</div><h3>Liquiditätskurve</h3>
+          <p>Sieh die Entwicklung deiner Salden im Zeitverlauf und antizipiere dein Monatsende auf einen Blick.</p></div>
+        <div class="feat"><div class="ic">🥧</div><h3>Berichte &amp; Diagramme</h3>
+          <p>Kreis- und Balkendiagramme nach Kategorie, Rubrik oder Zahlungsart – so verstehst du, wohin dein Geld fließt.</p></div>
+        <div class="feat"><div class="ic">📥</div><h3>CSV-Import</h3>
+          <p>Importiere deine Kontoauszüge im CSV-Format. Die halbautomatische Kategorisierung lernt deine wiederkehrenden Bezeichnungen.</p></div>
+        <div class="feat"><div class="ic">🗓️</div><h3>Terminplaner</h3>
+          <p>Richte wiederkehrende Buchungen ein und halte Kontoauszug und Abgleich stets aktuell.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="captures" class="gallery">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Ein Blick in die App</h2>
+        <p>Native macOS-Oberfläche, im hellen und dunklen Modus, verfügbar auf Französisch, Englisch, Spanisch, Italienisch und Deutsch.</p>
+      </div>
+      <div class="gal-grid">
+        <div class="gal"><img src="assets/de/Capture1.png" alt="Transaktionsliste">
+          <div class="cap"><b>Transaktionsliste</b> — detaillierte Bearbeitung und Unterbuchungen.</div></div>
+        <div class="gal"><img src="assets/de/Capture6.png" alt="Terminplaner">
+          <div class="cap"><b>Terminplaner</b> — wiederkehrende Buchungen und Frequenzen.</div></div>
+        <div class="gal"><img src="assets/de/Capture3.png" alt="Kontoauszug">
+          <div class="cap"><b>Kontoauszug</b> — gleiche deine Auszüge ab.</div></div>
+        <div class="gal"><img src="assets/de/Capture5.png" alt="Zahlungsarten">
+          <div class="cap"><b>Zahlungsarten</b> — Farben und Bezeichnungen anpassen.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="privacy">
+        <h2>Deine Daten bleiben bei dir</h2>
+        <p>PegaseUIData sendet nichts ins Internet. Alles wird lokal auf deinem Mac gespeichert –
+           kein Konto nötig, kein Server, keine Werbung.</p>
+        <div class="row">
+          <div><b>0</b><span>online gesendete Daten</span></div>
+          <div><b>100%</b><span>lokal &amp; privat</span></div>
+          <div><b>MIT</b><span>offener Quellcode</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap" style="max-width:820px">
+      <div class="sec-head"><h2>Häufige Fragen</h2></div>
+
+      <details open><summary>Ist PegaseUIData wirklich kostenlos?</summary>
+        <p>Ja, vollständig. Die App ist frei und wird unter der MIT-Lizenz veröffentlicht: Du darfst sie nutzen, verändern und sogar deine eigene Version weitergeben.</p></details>
+
+      <details><summary>Werden meine Daten online gespeichert?</summary>
+        <p>Nein. Alle Daten werden lokal auf deinem Mac gespeichert. Es werden keine Informationen an einen entfernten Server gesendet.</p></details>
+
+      <details><summary>Kann ich meine Bankdaten importieren?</summary>
+        <p>Ja. Der Import von CSV-Dateien wird unterstützt (weitere Formate folgen). Achte darauf, dass deine Datei die erwartete Struktur einhält: Datum, Betrag, Beschreibung usw.</p></details>
+
+      <details><summary>Lassen sich mehrere Konten verwalten?</summary>
+        <p>Ja. Lege beliebig viele Konten an und verfolge sie: Giro, Sparkonto, geschäftlich…</p></details>
+
+      <details><summary>Werden Buchungen automatisch kategorisiert?</summary>
+        <p>Eine halbautomatische Kategorisierung wird angeboten: Die App erkennt häufige Bezeichnungen und schlägt Kategorien vor, die du manuell anpassen kannst.</p></details>
+
+      <details><summary>Gibt es eine Version für Windows oder Linux?</summary>
+        <p>Nein. PegaseUIData wird mit SwiftUI ausschließlich für macOS entwickelt. Eine plattformübergreifende Version ist kurzfristig nicht geplant.</p></details>
+
+      <details><summary>Wie melde ich einen Fehler oder schlage eine Übersetzung vor?</summary>
+        <p>Schreib uns an <a href="mailto:thierry.hentic@gmail.com">thierry.hentic@gmail.com</a> mit deiner macOS-Version, den Schritten zum Reproduzieren des Problems und – wenn möglich – einem Screenshot. Jede Hilfe bei Übersetzungen ist willkommen!</p></details>
+    </div>
+  </section>
+
+  <section id="download" class="download">
+    <div class="wrap">
+      <div class="card">
+        <img src="assets/logo.png" alt="PegaseUIData-Symbol">
+        <h2 style="font-size:2rem">Bereit, die Kontrolle zurückzugewinnen?</h2>
+        <p style="color:var(--muted);max-width:48ch;margin:14px auto 0">
+          Lade PegaseUIData kostenlos herunter und verwalte deine Finanzen in wenigen Minuten.
+          Kompatibel mit macOS 14 (Sonoma) und neuer.</p>
+        <div class="cta">
+          <a class="btn btn-gold" href="PegaseUIData.dmg" download>⬇ PegaseUIData.dmg herunterladen</a>
+          <a class="btn btn-ghost" href="mailto:thierry.hentic@gmail.com">Kontakt</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div class="brand" style="font-size:1rem"><img src="assets/logo.png" alt="" style="width:30px;height:30px"> PegaseUIData</div>
+    <div>© 2026 · MIT-Lizenz · Mit ♥ für macOS erstellt</div>
+    <div style="display:flex;gap:20px">
+      <a href="mailto:thierry.hentic@gmail.com">Kontakt</a>
+      <a href="#faq">Support</a>
+      <a href="#top">Nach oben</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
