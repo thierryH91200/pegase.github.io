@@ -3,6 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+/* Redirection vers la langue du visiteur (ou son choix mémorisé). index.html = FR par défaut. */
+(function(){
+  var pages={fr:'index.html',en:'en.html',es:'es.html',it:'it.html',de:'de.html'};
+  var saved=null; try{saved=localStorage.getItem('pegase-lang');}catch(e){}
+  var lang=saved;
+  if(!lang){var n=(navigator.languages&&navigator.languages[0])||navigator.language||'fr';lang=n.slice(0,2).toLowerCase();}
+  if(!pages[lang])lang='fr';
+  if(lang!=='fr')location.replace(pages[lang]);
+})();
+</script>
 <title>PegaseUIData — Gérez vos finances sur Mac</title>
 <meta name="description" content="PegaseUIData : application macOS pour gérer vos comptes, suivre votre trésorerie et visualiser vos dépenses. Données 100 % locales.">
 <link rel="icon" type="image/png" href="assets/logo.png">
@@ -289,5 +300,14 @@
   </div>
 </footer>
 
+<script>
+/* Mémorise la langue choisie via le sélecteur, pour la conserver aux prochaines visites. */
+document.querySelectorAll('.lang a').forEach(function(a){
+  a.addEventListener('click',function(){
+    var m=a.getAttribute('href').replace('.html','');
+    try{localStorage.setItem('pegase-lang', m==='index'?'fr':m);}catch(e){}
+  });
+});
+</script>
 </body>
 </html>

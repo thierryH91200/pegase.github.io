@@ -276,5 +276,13 @@
   </div>
 </footer>
 
+<script>
+document.querySelectorAll('.lang a').forEach(function(a){
+  a.addEventListener('click',function(){
+    var m=a.getAttribute('href').replace('.html','');
+    try{localStorage.setItem('pegase-lang', m==='index'?'fr':m);}catch(e){}
+  });
+});
+</script>
 </body>
 </html>
