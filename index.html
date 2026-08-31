@@ -138,6 +138,17 @@
   .download .card{background:var(--card);border:1px solid var(--line);border-radius:24px;
     padding:56px 32px;max-width:760px;margin:0 auto;box-shadow:var(--shadow)}
   .download img{width:74px;height:74px;border-radius:18px;margin-bottom:20px}
+  .dual-cta{display:flex;align-items:stretch;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:30px}
+  .cta-card{display:flex;align-items:center;gap:15px;border-radius:16px;padding:18px 24px;min-width:250px;transition:transform .15s ease, box-shadow .2s ease}
+  .cta-card:hover{transform:translateY(-3px)}
+  .cta-card .ic{font-size:1.7rem;line-height:1}
+  .cta-card .big{display:block;font-size:1.3rem;font-weight:800;line-height:1.15}
+  .cta-card .sub{display:block;font-size:.9rem;opacity:.85;margin-top:2px}
+  .cta-try{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;box-shadow:0 12px 30px rgba(22,35,63,.3)}
+  .cta-buy{background:var(--card);border:1px solid var(--line);color:var(--ink);box-shadow:var(--shadow)}
+  .cta-buy .chev{margin-left:auto;padding-left:12px;color:var(--gold);font-size:1.5rem;font-weight:700}
+  .cta-or{display:flex;align-items:center;font-weight:700;color:var(--muted);letter-spacing:.06em}
+  @media(max-width:560px){.dual-cta{flex-direction:column;align-items:center}}
 
   footer{border-top:1px solid var(--line);padding:40px 0;color:var(--muted);font-size:.9rem}
   .foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px;align-items:center}
@@ -279,9 +290,17 @@
         <p style="color:var(--muted);max-width:48ch;margin:14px auto 0">
           Téléchargez PegaseUIData et gérez vos finances en quelques minutes.
           Compatible macOS 14 (Sonoma) et versions ultérieures.</p>
-        <div class="cta">
-          <a class="btn btn-gold" href="PegaseUIData.dmg" download>⬇ Télécharger PegaseUIData.dmg</a>
-          <a class="btn btn-ghost" href="mailto:thierry.hentic@gmail.com">Nous contacter</a>
+        <div class="dual-cta">
+          <a class="cta-card cta-try" href="PegaseUIData.dmg" download>
+            <span class="ic">⬇</span>
+            <span><span class="big">Télécharger</span><span class="sub">30 jours d'essai</span></span>
+          </a>
+          <div class="cta-or">OU</div>
+          <a class="cta-card cta-buy" href="#"><!-- TODO: lien Mac App Store -->
+            <span class="ic">🖥️</span>
+            <span><span class="big">29,99 €</span><span class="sub">macOS</span></span>
+            <span class="chev">›</span>
+          </a>
         </div>
       </div>
     </div>
